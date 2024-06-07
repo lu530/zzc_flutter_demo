@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
+import 'package:jh_flutter_demo/jh_common/utils/jh_screen_utils.dart';
 import 'package:jhtoast/jhtoast.dart';
 import '/jh_common/jh_form/jh_form.dart';
 import '/jh_common/widgets/jh_dialog.dart';
@@ -34,6 +36,7 @@ class _DialogTestPageState extends State<DialogTestPage> {
     'JhDialog-自定义内容5-选择类型更新数据2',
     'JhDialog-完全自定义',
     'JhDialog-完全自定义-外部点击事件',
+    'JhDialog-模拟语音',
   ];
 
   final dictArr = [
@@ -64,20 +67,32 @@ class _DialogTestPageState extends State<DialogTestPage> {
           JhDialog.show(context, content: '确认要退出吗？');
         }
         if (str == 'JhDialog-标题内容只有确定') {
-          JhDialog.show(context, title: '警告', content: '您的账号在异地登录，请重新登录！', rightText: '好的', hiddenCancel: true);
+          JhDialog.show(context,
+              title: '警告',
+              content: '您的账号在异地登录，请重新登录！',
+              rightText: '好的',
+              hiddenCancel: true);
         }
         if (str == 'JhDialog-修改按钮文字') {
-          JhDialog.show(context, title: '提示', content: '您需要同意相关协议才能使用！', leftText: '不同意', rightText: '同意');
+          JhDialog.show(context,
+              title: '提示',
+              content: '您需要同意相关协议才能使用！',
+              leftText: '不同意',
+              rightText: '同意');
         }
         if (str == 'JhDialog-点击按钮弹框不消失') {
-          JhDialog.show(context, title: '提示', content: '点击取消按钮弹框消失，点击确认按钮延时3秒后弹框消失', clickBtnPop: false, onConfirm: () {
+          JhDialog.show(context,
+              title: '提示',
+              content: '点击取消按钮弹框消失，点击确认按钮延时3秒后弹框消失',
+              clickBtnPop: false, onConfirm: () {
             Future.delayed(const Duration(seconds: 3), () {
               Navigator.pop(context);
             });
           });
         }
         if (str == 'JhDialog-拦截取消按钮点击事件') {
-          JhDialog.show(context, title: '提示', content: '点击取消按钮弹框不消失，点击确认按钮弹框消失', onConfirm: () {
+          JhDialog.show(context, title: '提示', content: '点击取消按钮弹框不消失，点击确认按钮弹框消失',
+              onConfirm: () {
             JhToast.showText(context, msg: '点击确定');
           }, onCancel: () {
             JhToast.showText(context, msg: '点击取消');
@@ -108,10 +123,12 @@ class _DialogTestPageState extends State<DialogTestPage> {
         }
 
         if (str == 'JhDialog-自定义内容') {
-          JhDialog.showCustomDialog(context, content: Container(height: 200, color: Colors.red));
+          JhDialog.showCustomDialog(context,
+              content: Container(height: 200, color: Colors.red));
         }
         if (str == 'JhDialog-自定义内容2') {
-          JhDialog.showCustomDialog(context, title: '提示', content: Container(height: 200, color: Colors.red));
+          JhDialog.showCustomDialog(context,
+              title: '提示', content: Container(height: 200, color: Colors.red));
         }
         if (str == 'JhDialog-自定义内容3-录入框') {
           _showInputDialog();
@@ -162,6 +179,93 @@ class _DialogTestPageState extends State<DialogTestPage> {
             ),
           );
         }
+
+        if (str == 'JhDialog-模拟语音') {
+          JhDialog.showAllCustomDialog(
+            context,
+            clickBgHidden: true,
+            child: Stack(
+              children: <Widget>[
+                Center(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Image.asset(
+                      'assets/images/common/voice_send.gif',
+                      width: 160,
+                      height: 54,
+                      color: Colors.white,
+                    ),
+                    const SizedBox(
+                      height: 12,
+                    ),
+                    Text(
+                      "01",
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontWeight: FontWeight.w600,
+                        fontSize: 16,
+                      ),
+                    ),
+                  ],
+                )),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      print("点击了外圈");
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 300,
+                      height: 300,
+                      decoration: BoxDecoration(
+                          color: Colors.grey.withOpacity(0.7),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(300))),
+                      child: Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          children: [
+                            SizedBox(
+                              width: JhScreenUtils.setWidth(250),
+                            ),
+                            Icon(
+                              Icons.close,
+                            )
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 0,
+                  child: GestureDetector(
+                    onTap: () {
+                      print("点击了小圆内");
+                    },
+                    child: Container(
+                      width: 200,
+                      height: 200,
+                      decoration: BoxDecoration(
+                          color: Color.fromRGBO(0, 183, 212, 1),
+                          borderRadius: BorderRadius.only(
+                              topRight: Radius.circular(200))),
+                      child: const Center(
+                          child: Text(
+                        '松开发送',
+                        style: TextStyle(color: Colors.white),
+                      )),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          );
+        }
       },
     );
   }
@@ -174,8 +278,10 @@ class _DialogTestPageState extends State<DialogTestPage> {
       isBoldTitle: false,
       clickBtnPop: false,
       content: StatefulBuilder(builder: (context, state) {
-        var lineColor = KColors.dynamicColor(context, KColors.kLineColor, KColors.kLineDarkColor);
-        var bgColor = KColors.dynamicColor(context, KColors.kAlertInputBgColor, KColors.kAlertInputBgDarkColor);
+        var lineColor = KColors.dynamicColor(
+            context, KColors.kLineColor, KColors.kLineDarkColor);
+        var bgColor = KColors.dynamicColor(context, KColors.kAlertInputBgColor,
+            KColors.kAlertInputBgDarkColor);
 
         return Container(
           height: 50,
@@ -216,11 +322,13 @@ class _DialogTestPageState extends State<DialogTestPage> {
       isBoldTitle: false,
       clickBtnPop: false,
       content: StatefulBuilder(builder: (context, state) {
-        var lineColor = KColors.dynamicColor(context, KColors.kLineColor, KColors.transparent);
+        var lineColor = KColors.dynamicColor(
+            context, KColors.kLineColor, KColors.transparent);
         return Container(
           height: 56,
           margin: const EdgeInsets.all(8),
-          decoration: BoxDecoration(border: Border.all(color: lineColor, width: 1)),
+          decoration:
+              BoxDecoration(border: Border.all(color: lineColor, width: 1)),
           child: Column(
             children: [
               JhFormSelectCell(
@@ -247,7 +355,8 @@ class _DialogTestPageState extends State<DialogTestPage> {
       builder: (ctx) {
         return StatefulBuilder(
           builder: (context, state) {
-            var lineColor = KColors.dynamicColor(context, KColors.kLineColor, KColors.transparent);
+            var lineColor = KColors.dynamicColor(
+                context, KColors.kLineColor, KColors.transparent);
 
             return BaseDialog(
               title: title,
@@ -256,7 +365,8 @@ class _DialogTestPageState extends State<DialogTestPage> {
               content: Container(
                 height: 56,
                 margin: const EdgeInsets.all(8),
-                decoration: BoxDecoration(border: Border.all(color: lineColor, width: 1)),
+                decoration: BoxDecoration(
+                    border: Border.all(color: lineColor, width: 1)),
                 child: Column(children: [
                   JhFormSelectCell(
                     showRedStar: true,
@@ -284,8 +394,11 @@ class _DialogTestPageState extends State<DialogTestPage> {
   }
 
   _showPicker(state) {
-    JhPickerTool.showStringPicker(context, data: dictArr, title: '请选择类型', labelKey: 'label', selectIndex: 1,
-        clickCallBack: (selectValue, selectIndex) {
+    JhPickerTool.showStringPicker(context,
+        data: dictArr,
+        title: '请选择类型',
+        labelKey: 'label',
+        selectIndex: 1, clickCallBack: (selectValue, selectIndex) {
       print(selectValue);
       print(selectValue['label']);
       print(selectIndex);
